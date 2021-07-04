@@ -11,11 +11,10 @@ def inicio():
     nivel = None
 
     while nivel != "1" and nivel != "2" and nivel != "3":
-        print("Escoja el nivel de dificultad: ")
         print("Escriba '1' Para el primer nivel (3 digitos)")
         print("Escriba '2' Para el segundo nivel (4 digitos)")
         print("Escriba '3' Para el tercer nivel (5 digitos)")
-        nivel = input()
+        nivel = input("Escoja el nivel de dificultad: ")
         if nivel != "1" and nivel != "2" and nivel != "3":
             print("Por favor ingrese una de las tres opciones.")
 
@@ -37,8 +36,7 @@ def inicio():
 def comparacion(numgen, v, niv):
     listum = []
     lisnumgen = []
-    print("Escriba el numero que piense que se genero: ")
-    num = input()
+    num = input("Escriba el numero que piense que se genero: ")
     strnumgen = str(numgen)
     for i in num:
         listum.append(i)
@@ -73,14 +71,27 @@ def score(niv, vid, cod):
     db = sqlite3.connect("HighScore.db")
     cursor = db.cursor()
 
-    print("¡Felicidades! Ingrese su apodo")
-    nom = input()
+    nom = input("¡Felicidades! Ingrese su apodo: ")
 
     cursor.execute("INSERT INTO 'Nivel {}' VALUES ('{}', {}, {})".format(niv, nom, vid, cod))
 
+    #CREADOR DE TABLAS EN SQLITE3, NO USAR
     #cursor.execute("CREATE TABLE 'Nivel 1' ('Apodo' TEXT, 'Vidas' INTEGER, 'Numero' INTEGER)")
     #cursor.execute("CREATE TABLE 'Nivel 2' ('Apodo' TEXT, 'Vidas' INTEGER, 'Numero' INTEGER)")
     #cursor.execute("CREATE TABLE 'Nivel 3' ('Apodo' TEXT, 'Vidas' INTEGER, 'Numero' INTEGER)")
+
+    cursor.execute("SELECT * FROM 'Nivel {}' ORDER BY 2 DESC".format(niv))
+    scores = cursor.fetchall()
+
+    print("\nHigh Score table")
+    print()
+
+    cont = 0
+
+    for users in scores:
+        if cont < 5:
+            print(users)
+            cont += 1
 
     db.commit()
     db.close()
